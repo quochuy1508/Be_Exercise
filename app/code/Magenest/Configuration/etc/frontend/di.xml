@@ -8,7 +8,7 @@
 
             <!-- this is important to specify so merging can properly happen -->
             <argument name="idAttributes" xsi:type="array">
-                <item name="/config/discounts/discount" xsi:type="string">name</item>
+                <item name="/config/resources/resource" xsi:type="string">id</item>
             </argument>
         </arguments>
     </virtualType>

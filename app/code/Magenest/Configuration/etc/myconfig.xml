@@ -21,13 +21,8 @@
                         </resource>
                     </resource>
                 </resource>
-                <resource id="Magento_Frontend::stores">
-                    <resource id="Magento_Frontend::stores_settings">
-                        <resource id="Magento_Config::config">
-                            <resource id="Magento_Catalog::config_catalog" title="Catalog Section" translate="title" />
-                        </resource>
-                    </resource>
-                    <resource id="Magento_Frontend::stores_attributes">
+                <resource id="Magento_Frontend::stores" title="Store" translate="title" sortOrder="40">
+                    <resource id="Magento_Frontend::stores_attributes" title="Stores Attributes" translate="title" sortOrder="10" >
                         <resource id="Magento_Catalog::attributes_attributes" title="Product" translate="title" sortOrder="30" />
                         <resource id="Magento_Catalog::sets" title="Attribute Set" translate="title" sortOrder="40"/>
                     </resource>
