@@ -2,13 +2,10 @@
 
 namespace Magenest\Cache\Model;
 
-use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Model\Context;
-use Magento\Framework\Model\ResourceModel\AbstractResource;
-use Magento\Framework\Registry;
 
-class CustomerDirectory extends AbstractModel
+class CustomerDirectory extends AbstractModel implements IdentityInterface
 {
     /**
      * CMS page cache tag
@@ -26,29 +23,24 @@ class CustomerDirectory extends AbstractModel
     protected $_eventPrefix = 'magenest_customer_diretory';
 
     /**
-     * @param Context $context
-     * @param Registry $registry
-     * @param AbstractResource|null $resource
-     * @param AbstractDb|null $resourceCollection
-     * @param array $data
-     */
-    function __construct(
-        Context          $context,
-        Registry         $registry,
-        AbstractResource $resource = null,
-        AbstractDb       $resourceCollection = null,
-        array            $data = [])
-    {
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-    }
-
-    /**
      * Initialize resource model
      *
      * @return void
      */
     protected function _construct()
     {
-        $this->_init(\Magenest\Cache\Model\ResourceModel\CustomerDirectory::class);
+        $this->_init(ResourceModel\CustomerDirectory::class);
+    }
+
+    public function getIdentities()
+    {
+        return [self::CACHE_TAG . '_' . $this->getEntityId()];
+    }
+
+    public function getDefaultValues()
+    {
+        $values = [];
+
+        return $values;
     }
 }

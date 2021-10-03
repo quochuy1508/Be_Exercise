@@ -8,25 +8,10 @@ use Magento\Store\Model\StoreManagerInterface;
 
 class CustomerDirectory extends AbstractDb
 {
-    /**
-     * Block grid entity table
-     *
-     * @var string
-     */
-    protected $_blockProductTable;
-
-    /**
-     * Construct
-     *
-     * @param Context $context
-     * @param StoreManagerInterface $storeManager
-     * @param string|null $resourcePrefix
-     */
     public function __construct(
-        Context $context,
-                $resourcePrefix = null
+        \Magento\Framework\Model\ResourceModel\Db\Context $context
     ) {
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context);
     }
 
     /**
