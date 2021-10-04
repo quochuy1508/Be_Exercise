@@ -6,6 +6,8 @@
 namespace Magenest\CLI\Console\Command;
 
 use Magenest\CLI\Api\CancelOrderWithStatusInterface;
+use Magento\Framework\App\Area;
+use Magento\Framework\App\State;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -26,20 +28,26 @@ class CancelOrderWithStatusNotHandle extends Command
      */
     private $cancelOrderWithStatus;
 
+    /** @var State **/
+    private $state;
+
     /**
      * @param CancelOrderWithStatusInterface $cancelOrderWithStatus
      * @param string|null $name
      */
     public function __construct(
         CancelOrderWithStatusInterface $cancelOrderWithStatus,
+        State $state,
         string $name = null
     ) {
         $this->cancelOrderWithStatus = $cancelOrderWithStatus;
+        $this->state = $state;
         parent::__construct($name);
     }
 
     /**
      * {@inheritdoc}
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function configure()
     {
@@ -54,6 +62,7 @@ class CancelOrderWithStatusNotHandle extends Command
         $this->setName('order:clear')
             ->setDescription('Clear Status Order')
             ->setDefinition($options);
+        $this->state->setAreaCode(Area::AREA_GLOBAL);
         parent::configure();
     }
 

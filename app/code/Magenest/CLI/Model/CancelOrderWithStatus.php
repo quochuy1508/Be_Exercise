@@ -4,6 +4,7 @@ namespace Magenest\CLI\Model;
 
 use Magenest\CLI\Api\CancelOrderWithStatusInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -37,13 +38,13 @@ class CancelOrderWithStatus implements CancelOrderWithStatusInterface
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
         OrderRepositoryInterface $orderRepository,
-        DateTime $dateTime,
-        OrderManagementInterface $orderManagement
+        DateTime $dateTime
+//        OrderManagementInterface $orderManagement = null
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->orderRepository = $orderRepository;
         $this->dateTime = $dateTime;
-        $this->orderManagement = $orderManagement;
+//        $this->orderManagement = $orderManagement ?: ObjectManager::getInstance()->get(OrderManagementInterface::class);
     }
 
     /**
@@ -51,6 +52,7 @@ class CancelOrderWithStatus implements CancelOrderWithStatusInterface
      */
     public function execute($statusOrder)
     {
+        $this->orderManagement = ObjectManager::getInstance()->get(OrderManagementInterface::class);
         if ($statusOrder == 'pending' || $statusOrder == 'processing') {
             $searchCriteria = $this->searchCriteriaBuilder
                 ->addFilter(OrderInterface::STATUS, $statusOrder)
