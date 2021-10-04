@@ -97,52 +97,22 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      */
     public function getData()
     {
-        $primaryFieldName = join('', $this->getAllIds());
-        $cacheKey = CustomerDirectory::CACHE_TAG . '_' . $primaryFieldName;
-
-        if ($this->isCacheEnabled() && $data = $this->_cache->load($cacheKey)) {
-            $this->loadedData[$primaryFieldName] = $this->serializer->unserialize($data);
-        } else {
-            if (isset($this->loadedData)) {
-                return $this->loadedData;
-            }
-            $items = $this->collection->getItems();
-            /** @var \Magenest\Cache\Model\CustomerDirectory $block */
-            foreach ($items as $block) {
-                $this->loadedData[$block->getId()] = $block->getData();
-                if ($this->isCacheEnabled()) {
-                    $this->_cache->save(
-                        $this->serializer->serialize($block->getData()),
-                        $cacheKey,
-                        [
-                            Config::TYPE_IDENTIFIER
-                        ]
-                    );
-                }
-            }
-
-            $data = $this->dataPersistor->get('customer_directory');
-            if (!empty($data)) {
-                $block = $this->collection->getNewEmptyItem();
-                $block->setData($data);
-                $this->loadedData[$block->getId()] = $block->getData();
-                $this->dataPersistor->clear('customer_directory');
-            }
+        if (isset($this->loadedData)) {
+            return $this->loadedData;
+        }
+        $items = $this->collection->getItems();
+        /** @var \Magenest\Cache\Model\CustomerDirectory $block */
+        foreach ($items as $block) {
+            $this->loadedData[$block->getId()] = $block->getData();
         }
 
+        $data = $this->dataPersistor->get('customer_directory');
+        if (!empty($data)) {
+            $block = $this->collection->getNewEmptyItem();
+            $block->setData($data);
+            $this->loadedData[$block->getId()] = $block->getData();
+            $this->dataPersistor->clear('customer_directory');
+        }
         return $this->loadedData;
-    }
-
-    /**
-     * Check EAV cache availability
-     *
-     * @return bool
-     */
-    public function isCacheEnabled()
-    {
-        if ($this->_isCacheEnabled === null) {
-            $this->_isCacheEnabled = $this->_cacheState->isEnabled(Config::TYPE_IDENTIFIER);
-        }
-        return $this->_isCacheEnabled;
     }
 }

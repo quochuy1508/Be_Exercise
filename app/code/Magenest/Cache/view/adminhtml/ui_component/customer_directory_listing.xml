@@ -18,6 +18,7 @@
     <dataSource name="customer_directory_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
             <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument>
+            <argument name="class" xsi:type="string">Magenest\Cache\Ui\DataProvider\CustomerDirectory\ListingDataProvider</argument>
             <argument name="name" xsi:type="string">customer_directory_listing_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">entity_id</argument>
             <argument name="requestFieldName" xsi:type="string">entity_id</argument>

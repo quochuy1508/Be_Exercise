@@ -7,6 +7,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Api\OrderManagementInterface;
 
 /**
  * Class CancelOrderWithStatus
@@ -28,14 +29,21 @@ class CancelOrderWithStatus implements CancelOrderWithStatusInterface
      */
     private $dateTime;
 
+    /**
+     * @var OrderManagementInterface
+     */
+    private $orderManagement;
+
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
         OrderRepositoryInterface $orderRepository,
-        DateTime $dateTime
+        DateTime $dateTime,
+        OrderManagementInterface $orderManagement
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->orderRepository = $orderRepository;
         $this->dateTime = $dateTime;
+        $this->orderManagement = $orderManagement;
     }
 
     /**
@@ -50,8 +58,7 @@ class CancelOrderWithStatus implements CancelOrderWithStatusInterface
                 ->create();
             $orders = $this->orderRepository->getList($searchCriteria)->getItems();
             foreach ($orders as $order) {
-                $order->setStatus('canceled');
-                $this->orderRepository->save($order);
+                $this->orderManagement->cancel((int)$order->getEntityId());
             }
             return true;
         } else {

@@ -78,7 +78,7 @@ class Configuration extends Template
         $config = $this->configFactory->create();
         $resources = $config->get();
         if (!empty($resources['config']['acl']['resources'])) {
-            $tree = $this->_resourceTreeBuilder->build($resources['config']['acl']['resources']);
+            $tree = $this->build($resources['config']['acl']['resources']);
         } else {
             $tree = [];
         }
@@ -92,5 +92,43 @@ class Configuration extends Template
         );
         $configResource = reset($configResource);
         return $configResource['children'] ?? [];
+    }
+
+    /**
+     * Transform resource list into sorted resource tree that includes only active resources
+     *
+     * @param array $resourceList
+     * @return array
+     */
+    private function build(array $resourceList)
+    {
+        $result = [];
+        foreach ($resourceList as $resource) {
+            if ($resource['disabled']) {
+                continue;
+            }
+
+            if ($resource['visible']) {
+                continue;
+            }
+            unset($resource['disabled']);
+            unset($resource['visible']);
+            $resource['children'] = $this->build($resource['children']);
+            $result[] = $resource;
+        }
+        usort($result, [$this, '_sortTree']);
+        return $result;
+    }
+
+    /**
+     * Sort ACL resource nodes
+     *
+     * @param array $nodeA
+     * @param array $nodeB
+     * @return int
+     */
+    private function _sortTree(array $nodeA, array $nodeB)
+    {
+        return $nodeA['sortOrder'] < $nodeB['sortOrder'] ? -1 : ($nodeA['sortOrder'] > $nodeB['sortOrder'] ? 1 : 0);
     }
 }

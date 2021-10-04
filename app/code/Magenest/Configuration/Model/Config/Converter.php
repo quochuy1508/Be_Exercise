@@ -55,6 +55,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         $resourceData['sortOrder'] = $sortOrderNode !== null ? (int)$sortOrderNode->nodeValue : 0;
         $disabledNode = $resourceAttributes->getNamedItem('disabled');
         $resourceData['disabled'] = $disabledNode !== null && $disabledNode->nodeValue == 'true';
+        $visibleNode = $resourceAttributes->getNamedItem('visible');
+        $resourceData['visible'] = $visibleNode !== null && $visibleNode->nodeValue == 'false';
         // convert child resource nodes if needed
         $resourceData['children'] = [];
         /** @var $childNode \DOMNode */
