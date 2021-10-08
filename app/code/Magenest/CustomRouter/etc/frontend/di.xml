@@ -17,4 +17,8 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Catalog\Model\Layer\Filter\Item">
+        <plugin name="change_url_price_filter" type="Magenest\CustomRouter\Plugin\ChangeUrlFilterPrice"/>
+    </type>
 </config>
